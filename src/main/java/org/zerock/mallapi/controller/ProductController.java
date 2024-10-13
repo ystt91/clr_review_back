@@ -56,7 +56,7 @@ public class ProductController {
         return productService.getList(pageRequestDTO);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Map<String, Long> register(ProductDTO productDTO){
 
         //파일 우선 처리
@@ -69,6 +69,12 @@ public class ProductController {
         log.info(uploadFileNames);
 
         Long pno = productService.register(productDTO);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         return Map.of("result", pno);
     }
@@ -113,6 +119,7 @@ public class ProductController {
         } // end if
 
         return Map.of("RESULT", "SUCCESS");
+
     }
 
     //원래라면 삭제 기능은 없고
@@ -126,4 +133,5 @@ public class ProductController {
 
         return Map.of("RESULT", "SUCCESS");
     }
+
 }

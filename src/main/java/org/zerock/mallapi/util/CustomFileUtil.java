@@ -54,7 +54,7 @@ public class CustomFileUtil {
     public List<String> saveFiles(List<MultipartFile> files) throws RuntimeException {
 
         if(files == null || files.size() == 0) {
-            //return List.of();
+            return List.of();
             //return null
         }
 

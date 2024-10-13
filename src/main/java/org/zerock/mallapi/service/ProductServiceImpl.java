@@ -52,8 +52,13 @@ public class ProductServiceImpl implements ProductService {
                     .price(product.getPrice())
                     .build();
 
-            String imageStr = productImage.getFileName();
-            productDTO.setUploadFileNames(List.of(imageStr));
+
+            if (productImage != null) { // productImage가 null이 아닐 경우에만 파일 이름을 설정합니다.
+                String imageStr = productImage.getFileName();
+                productDTO.setUploadFileNames(List.of(imageStr));
+            } else {
+                productDTO.setUploadFileNames(List.of()); // productImage가 null일 경우 빈 리스트로 설정합니다.
+            }
 
             return productDTO;
         }).collect(Collectors.toList());
