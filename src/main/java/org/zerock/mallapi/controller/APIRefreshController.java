@@ -35,8 +35,7 @@ public class APIRefreshController {
 
         //AccessToken의 만료 여부 확인
         if(checkExpiredToken(accessToken) == false){
-            return Map.of("accessTokebn", accessToken, "refreshToken", refreshToken);
-
+            return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
         }
 
         //RefreshToken 검증
