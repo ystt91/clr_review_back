@@ -45,3 +45,7 @@
 
 # ElementCollection의 장점
 Entity만 지우면 엘리먼트 컬렉션은 따라서 지워진다.
+
+# 의미가 있는 데이터를 변경할 것
+CartDTO는 의미가 없다. CartItemDTO는 의미가 있다.
+Cart를 직접 변경 하는 것이 아니라 Cart안에 있는 Item들을 직접 변경할 거니까
