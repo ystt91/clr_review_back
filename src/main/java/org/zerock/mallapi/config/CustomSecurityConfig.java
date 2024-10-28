@@ -20,6 +20,7 @@ import org.zerock.mallapi.security.handler.APILoginSuccessHandler;
 import org.zerock.mallapi.security.handler.CustomAccessDeniedHandler;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @Log4j2
@@ -70,6 +71,7 @@ public class CustomSecurityConfig {
 
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

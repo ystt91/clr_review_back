@@ -12,10 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.zerock.mallapi.domain.Member;
+import org.zerock.mallapi.domain.MemberRole;
 import org.zerock.mallapi.dto.MemberDTO;
+import org.zerock.mallapi.dto.MemberModifyDTO;
 import org.zerock.mallapi.repository.MemberRepository;
 
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -29,20 +33,62 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO getKakaoMember(String accessToken) {
 
-
         // accessToken을 이용해서 사용자 정보를 갖고오기
         // 카카오 연동 닉네임 - 이메일 주소에 해당
 
         String nickname = getEmailFromKakaoAccessToken(accessToken);
 
         // 기존 DB 회원 O , 회원 X 구분
+        Optional<Member> result = memberRepository.findById(nickname);
 
+        if(result.isPresent()) {
 
-        return null;
+            MemberDTO memberDTO = entityToDTO(result.get());
+
+            log.info("existed................" + memberDTO);
+            //return
+            return memberDTO;
+
+        }
+
+        Member socialMember = makeSocialMember(nickname);
+
+        memberRepository.save(socialMember);
+
+        MemberDTO memberDTO = entityToDTO(socialMember);
+
+        return memberDTO;
 
     }
 
+    @Override
+    public void modifyMember(MemberModifyDTO memberModifyDTO) {
+        Optional<Member> result = memberRepository.findById(memberModifyDTO.getEmail());
 
+        Member member = result.orElseThrow();
+
+        member.changeNickname(memberModifyDTO.getNickname());
+        member.changeSocial(false);
+        member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
+
+        memberRepository.save(member);
+    }
+
+    private Member makeSocialMember(String email){
+        String tempPassword = makeTempPassword();
+        log.info("tempPassword: " + tempPassword);
+
+        Member member = Member.builder()
+                .email(email)
+                .pw(passwordEncoder.encode(tempPassword))
+                .nickname("Social Member")
+                .social(true)
+                .build();
+
+        member.addRole(MemberRole.USER);
+
+        return member;
+    }
 
     private String getEmailFromKakaoAccessToken(String accessToken){
 
