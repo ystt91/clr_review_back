@@ -9,7 +9,7 @@ public class CartItemDTO {
 
     private Long pno;
 
-    private Long qty;
+    private int qty;
 
     private Long cino;
 

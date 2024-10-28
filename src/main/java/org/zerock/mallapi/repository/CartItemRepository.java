@@ -23,7 +23,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "left join p.imageList pi " +
             "where c.owner.email = :email and pi.ord = 0 " +
             " order by ci.cino desc")
-    List<Object[]> getItemsOfCartDTOByEmail(@Param("email") String email);
+    List<CartItemListDTO> getItemsOfCartDTOByEmail(@Param("email") String email);
 
     // 이메일, 상품 번호로 해당 상품이 장바구니 아이템으로 존재하는지 확인
     @Query("select ci from CartItem ci left join Cart c on ci.cart = c " +

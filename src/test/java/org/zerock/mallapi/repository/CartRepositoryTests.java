@@ -10,7 +10,9 @@ import org.zerock.mallapi.domain.Cart;
 import org.zerock.mallapi.domain.CartItem;
 import org.zerock.mallapi.domain.Member;
 import org.zerock.mallapi.domain.Product;
+import org.zerock.mallapi.dto.CartItemListDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -63,6 +65,45 @@ public class CartRepositoryTests {
     public void testListOfMember(){
         String email = "user1@aaa.com";
 
-        cartItemRepository.getItemsOfCartDTOByEmail(email);
+        List<CartItemListDTO> cartItemListDTOList = cartItemRepository.getItemsOfCartDTOByEmail(email);
+
+        for (CartItemListDTO dto : cartItemListDTOList) {
+            log.info(dto);
+        }
+    }
+
+    @Test
+    public void testDeleteThenList(){
+        Long cino = 1L;
+
+        Long cno = cartItemRepository.getCartFromItem(cino);
+
+        cartItemRepository.deleteById(cino);
+
+        List<CartItemListDTO> cartItemList = cartItemRepository.getItemsOfCartDTOByCart(cno);
+
+        for(CartItemListDTO dto : cartItemList){
+            log.info(dto);
+        }
+
+
+    }
+
+    @Test
+    @Transactional
+    @Commit
+    public void testUpdateByCino(){
+
+        Long cino = 1L;
+        int qty = 4;
+
+        Optional<CartItem> result = cartItemRepository.findById(cino);
+
+        CartItem cartItem = result.orElseThrow();
+
+        cartItem.changeQty(qty);
+
+        cartItemRepository.save(cartItem);
+
     }
 }
