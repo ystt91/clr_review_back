@@ -55,6 +55,12 @@ public class ProductController {
     @GetMapping("/list")
     public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO){
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return productService.getList(pageRequestDTO);
     }
 
@@ -72,17 +78,20 @@ public class ProductController {
 
         Long pno = productService.register(productDTO);
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         return Map.of("result", pno);
     }
 
     @GetMapping("/{pno}")
     public ProductDTO read(@PathVariable("pno") Long pno){
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+
         return productService.get(pno);
     }
 
